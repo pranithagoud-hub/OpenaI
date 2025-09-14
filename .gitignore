@@ -8,3 +8,4 @@ backend/.env
 # Build output
 dist/
 build/
+.env
