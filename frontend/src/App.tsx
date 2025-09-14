@@ -5,40 +5,46 @@ function App() {
   const [meaning, setMeaning] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const getMeaning = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
     setLoading(true)
     setMeaning('')
+
     try {
-      const res = await fetch('http://localhost:5000/api/angel-number', {
+      const res = await fetch('http://localhost:5000/api/healing', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({number}),
       })
+
       const data = await res.json()
-      setMeaning(data.meaning)
+      setMeaning(data.message)
     } catch (err) {
-      setMeaning('Error fetching meaning')
+      setMeaning('❌ Error fetching response')
     }
+
     setLoading(false)
   }
 
   return (
-    <div style={{maxWidth: 400, margin: 'auto', padding: 40}}>
-      <h2>Angel Number Meaning</h2>
-      <input
-        type='text'
-        placeholder='Enter angel number'
-        value={number}
-        onChange={e => setNumber(e.target.value)}
-        style={{width: '100%', padding: 8, marginBottom: 10}}
-      />
-      <button onClick={getMeaning} disabled={loading || !number}>
-        {loading ? 'Loading...' : 'Get Meaning'}
-      </button>
+    <div style={{padding: '20px'}}>
+      <h1>🌸 Spiritual Healing AI</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type='text'
+          value={number}
+          onChange={e => setNumber(e.target.value)}
+          placeholder='Enter number...'
+        />
+        <button type='submit' disabled={loading}>
+          {loading ? 'Loading...' : 'Get Meaning'}
+        </button>
+      </form>
+
       {meaning && (
-        <div style={{marginTop: 20}}>
-          <strong>Meaning:</strong>
-          <div>{meaning}</div>
+        <div style={{marginTop: '20px'}}>
+          <h2>✨ Meaning:</h2>
+          <p>{meaning}</p>
         </div>
       )}
     </div>
